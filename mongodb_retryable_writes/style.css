@@ -62,7 +62,7 @@
 
 .reveal p.bio {
     display: inline-block;
-    margin-top: 4em;
+    margin-top: 0em;
     padding-left: 4em;
     height: 3em;
     background-image: url("../common/img/jmikola_cartoon.png");
@@ -77,6 +77,17 @@
     background-repeat: no-repeat;
     background-size: contain;
     padding-left: 50px;
+}
+
+.reveal p.shane-bio {
+    display: inline-block;
+    margin-top: 4em;
+    padding-left: 4em;
+    height: 3em;
+    background-image: url("img/shane-harvey.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 section[data-state="photo-credits"] ul li {
