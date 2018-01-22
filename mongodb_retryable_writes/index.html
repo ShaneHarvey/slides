@@ -64,6 +64,10 @@
                                 <img src="img/moving-letter.svg" style="height: 5em; position: absolute; top: 5em; left: 12em">
                             </span>
                         </div>
+                        <aside class="notes">
+                            MongoDB 3.6 drivers automatically retry write operations after connection failure.
+                            Let's jump to an example.
+                        </aside>
                     </section>
 
                     <section>
@@ -145,7 +149,7 @@
                     </section>
 
                     <section>
-                        <h2>Let&rsquo;s review some<br>best practices</h2>
+                        <h2>Let&rsquo;s review some best<br>practices for MongoDB 3.4</h2>
 
                         <p style="display: inline-block;">
                             <img src="img/ajdavis.jpg" style="float: left; margin-right: 1em; height: 4em;">
@@ -164,6 +168,9 @@
                               { $inc: { count: 1 }}
                             );
                         </code></pre>
+                        <aside class="notes">
+                            This update is non-idempotent. Meaning that the document will change each time this update completes.
+                        </aside>
                     </section>
 
                     <section>
@@ -197,6 +204,7 @@
                         </table>
 
                         <aside class="notes">
+                            Let's examine 3 types of errors and 3 retry approaches.
                             For persistent outages, the driver knows that a server is unreachable due to SDAM.
                             <br><br>
                             One attempt is enough to allow SDAM to rediscover the primary.
