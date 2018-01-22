@@ -160,21 +160,7 @@
                     </section>
 
                     <section>
-                        <h2>This was our update&hellip;</h2>
-
-                        <pre><code class="js" data-trim>
-                            db.coll.updateOne(
-                              { _id: 16 },
-                              { $inc: { count: 1 }}
-                            );
-                        </code></pre>
-                        <aside class="notes">
-                            This update is non-idempotent. Meaning that the document will change each time this update completes.
-                        </aside>
-                    </section>
-
-                    <section>
-                        <h2>Errors and retry strategies</h2>
+                        <h2>Errors and retry strategies<br><em>idempotent</em>&nbsp; operations</h2>
 
                         <table>
                             <tr>
@@ -185,47 +171,15 @@
                             </tr>
                             <tr>
                                 <th>Never retry</th>
-                                <td class="fragment red">May undercount</td>
+                                <td class="fragment red">May not apply</td>
                                 <td class="fragment green">OK</td>
                                 <td class="fragment green">OK</td>
                             </tr>
                             <tr>
                                 <th>Always retry</th>
-                                <td class="fragment red">May overcount</td>
+                                <td class="fragment green">OK</td>
                                 <td class="fragment red">Wastes time</td>
                                 <td class="fragment red">Wastes time</td>
-                            </tr>
-                            <tr>
-                                <th>Retry once</th>
-                                <td class="fragment red">May overcount</td>
-                                <td class="fragment green">OK</td>
-                                <td class="fragment green">OK</td>
-                            </tr>
-                        </table>
-
-                        <aside class="notes">
-                            Let's examine 3 types of errors and 3 retry approaches.
-                            For persistent outages, the driver knows that a server is unreachable due to SDAM.
-                            <br><br>
-                            One attempt is enough to allow SDAM to rediscover the primary.
-                        </aside>
-                    </section>
-
-                    <section>
-                        <h2>There&rsquo;s no good solution for<br>transient network errors</h2>
-
-                        <img src="img/disappointed.svg" style="height: 8em">
-                    </section>
-
-                    <section>
-                        <h2>We can safely retry<br><em>idempotent</em>&nbsp; operations</h2>
-
-                        <table>
-                            <tr>
-                                <td style="border: 0 !important;"></td>
-                                <th>Transient network error</th>
-                                <th>Persistent outage</th>
-                                <th>Command error</th>
                             </tr>
                             <tr>
                                 <th>Retry once</th>
@@ -237,6 +191,7 @@
 
                         <aside class="notes">
                             Idempotent operations have the same outcome whether you execute them once or multiple times.
+                            We can safely retry these.
                         </aside>
                     </section>
 
@@ -291,6 +246,64 @@
                             <br><br>
                             Other updates can be split into two idempotent steps (per Jesse's article), but this entails multiple round trips and requires that we clean up incomplete operations.
                         </aside>
+                    </section>
+
+                    <section>
+                        <h2>This was our update&hellip;</h2>
+
+                        <pre><code class="js" data-trim>
+                            db.coll.updateOne(
+                              { _id: 16 },
+                              { $inc: { count: 1 }}
+                            );
+                        </code></pre>
+                        <aside class="notes">
+                            This update is non-idempotent. Meaning that the document will change each time this update completes.
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Errors and retry strategies<br><em>non-idempotent</em>&nbsp; operations</h2>
+
+                        <table>
+                            <tr>
+                                <td style="border: 0 !important;"></td>
+                                <th>Transient network error</th>
+                                <th>Persistent outage</th>
+                                <th>Command error</th>
+                            </tr>
+                            <tr>
+                                <th>Never retry</th>
+                                <td class="fragment red">May undercount</td>
+                                <td class="fragment green">OK</td>
+                                <td class="fragment green">OK</td>
+                            </tr>
+                            <tr>
+                                <th>Always retry</th>
+                                <td class="fragment red">May overcount</td>
+                                <td class="fragment red">Wastes time</td>
+                                <td class="fragment red">Wastes time</td>
+                            </tr>
+                            <tr>
+                                <th>Retry once</th>
+                                <td class="fragment red">May overcount</td>
+                                <td class="fragment green">OK</td>
+                                <td class="fragment green">OK</td>
+                            </tr>
+                        </table>
+
+                        <aside class="notes">
+                            Let's examine 3 types of errors and 3 retry approaches.
+                            For persistent outages, the driver knows that a server is unreachable due to SDAM.
+                            <br><br>
+                            One attempt is enough to allow SDAM to rediscover the primary.
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>There&rsquo;s no good solution for<br>transient network errors</h2>
+
+                        <img src="img/disappointed.svg" style="height: 8em">
                     </section>
 
                     <section>
@@ -1106,7 +1119,6 @@
                             <span class="fragment">/sessions<br></span>
                             <span class="fragment">/retryable-writes<br></span>
                             <span class="fragment">/causal-consistency<br></span>
-                            <span class="fragment">/retryable-reads</span>
                         </p>
                     </section>
 
